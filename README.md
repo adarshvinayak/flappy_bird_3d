@@ -31,15 +31,6 @@ The game follows a modular architecture:
 - `supabase.js`: Database interactions and leaderboard management
 - `config.js`: Environment and game configuration
 
-## Quick Start
-
-1. Clone the repository
-2. Create a `.env` file with your Supabase credentials
-3. Start a local server:
-   ```bash
-   python -m http.server 8000
-   ```
-4. Open http://localhost:8000
 
 ## Controls
 
