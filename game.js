@@ -1,23 +1,37 @@
 // Game constants
 const GRAVITY = -0.1;
 const FLAP_FORCE = -5;
-const PIPE_WIDTH = 80;
+const PIPE_WIDTH = 100;
 const PIPE_HEIGHT = 1;
 const BIRD_SIZE = 20;
 const SCENE_WIDTH = 1920;
 const SCENE_HEIGHT = 1080;
 const CLOUD_COUNT = 4;
-const PIPE_SPAWN_INTERVAL = 1500;
-const MAX_PIPE_SPEED_INCREASE = 8; // Maximum speed increase limit
+const PIPE_SPAWN_INTERVAL = 2000; // Increased from 1500 to give more time between pipes
+const MAX_PIPE_SPEED_INCREASE = 8;
+
+// Mobile detection
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+// Adjust constants for mobile
+const MOBILE_SCALE = isMobile ? 0.6 : 1;
+const MOBILE_PIPE_GAP = isMobile ? 250 : 200; // Larger gap on mobile
+const MOBILE_PIPE_SPEED = isMobile ? 1.5 : 2; // Slower speed on mobile
 
 // Mutable game settings
-let PIPE_SPEED = 2;
-let PIPE_GAP = 200;
+let PIPE_SPEED = isMobile ? MOBILE_PIPE_SPEED : 2;
+let PIPE_GAP = isMobile ? MOBILE_PIPE_GAP : 200;
 
 // Difficulty settings
 const DIFFICULTY_SETTINGS = {
-    'easy': { pipeGap: 200, pipeSpeed: 2 },
-    'hard': { pipeGap: 150, pipeSpeed: 4.5 }
+    'easy': { 
+        pipeGap: isMobile ? MOBILE_PIPE_GAP : 200, 
+        pipeSpeed: isMobile ? MOBILE_PIPE_SPEED : 2 
+    },
+    'hard': { 
+        pipeGap: isMobile ? MOBILE_PIPE_GAP * 0.75 : 150, 
+        pipeSpeed: isMobile ? MOBILE_PIPE_SPEED * 2 : 4.5 
+    }
 };
 
 // Game state
@@ -37,6 +51,10 @@ let background;
 let backgroundTexture;
 let currentDifficulty = 'easy';
 let pipeTexture;
+let centuryImage;
+let centurySound;
+let centuryImageMesh;
+let centuryImageShown = false;
 
 // Audio elements
 let backgroundMusic;
@@ -69,6 +87,10 @@ function initAudio() {
     
     deadSound = new Audio('dead.mp3');
     deadSound.volume = 0.1;
+
+    // Century sound
+    centurySound = new Audio('100.mp3');
+    centurySound.volume = 1;
 }
 
 // Add test function for database operations
@@ -401,6 +423,9 @@ function handleKeyPress(event) {
     if (event.code === 'Space') {
         if (gameStarted && !gameOver) {
             flap();
+        } else if (gameOver) {
+            // Restart game when spacebar is pressed on game over screen
+            restartGame();
         }
     }
 }
@@ -427,21 +452,25 @@ function createPipe() {
     const safeMargin = 300; // Safety margin from edges
     const availableHeight = SCENE_HEIGHT - PIPE_GAP - (2 * safeMargin);
     const gapPosition = (Math.random() * availableHeight) - (SCENE_HEIGHT/2 - PIPE_GAP/2 - safeMargin);
-        // Create pipe material with texture
+    
+    // Create pipe material with texture
     const pipeMaterial = new THREE.MeshPhongMaterial({ 
         map: pipeTexture,
         shininess: 30,
         specular: 0x444444
     });
     
+    // Create cylinder geometry for pipes
+    const pipeRadius = PIPE_WIDTH / 2;
+    const pipeGeometry = new THREE.CylinderGeometry(pipeRadius, pipeRadius, SCENE_HEIGHT, 16);
+    
     // Top pipe
-    const topPipeGeometry = new THREE.BoxGeometry(PIPE_WIDTH, SCENE_HEIGHT, 50);
-    const topPipe = new THREE.Mesh(topPipeGeometry, pipeMaterial);
+    const topPipe = new THREE.Mesh(pipeGeometry, pipeMaterial);
     topPipe.position.set(SCENE_WIDTH/2, gapPosition + PIPE_GAP/2 + SCENE_HEIGHT/2, 0);
     scene.add(topPipe);
     
     // Bottom pipe
-    const bottomPipe = new THREE.Mesh(topPipeGeometry, pipeMaterial);
+    const bottomPipe = new THREE.Mesh(pipeGeometry, pipeMaterial);
     bottomPipe.position.set(SCENE_WIDTH/2, gapPosition - PIPE_GAP/2 - SCENE_HEIGHT/2, 0);
     scene.add(bottomPipe);
     
@@ -452,7 +481,13 @@ function createPipe() {
 function checkCollision() {
     if (!bird) return false;
     
+    // Create a slightly smaller bird collision box for better gameplay feel
     const birdBox = new THREE.Box3().setFromObject(bird);
+    // Shrink bird collision box slightly for better gameplay feel
+    birdBox.min.x += BIRD_SIZE * 0.3;
+    birdBox.min.y += BIRD_SIZE * 0.3;
+    birdBox.max.x -= BIRD_SIZE * 0.3;
+    birdBox.max.y -= BIRD_SIZE * 0.3;
     
     // Check ground and ceiling collisions
     if (bird.position.y > SCENE_HEIGHT/2.8 - BIRD_SIZE || 
@@ -462,23 +497,22 @@ function checkCollision() {
     
     // Check pipe collisions
     for (let pipe of pipes) {
+        // Create collision boxes that match the pipe dimensions
         const topBox = new THREE.Box3().setFromObject(pipe.top);
         const bottomBox = new THREE.Box3().setFromObject(pipe.bottom);
         
-        // Adjust collision boxes to be smaller than pipe width and height
-        const collisionOffsetX = (PIPE_WIDTH - 5) / 2;
-        const collisionOffsetY = (SCENE_HEIGHT - PIPE_GAP) / 1.7;
+        // Use a small margin to make collision more forgiving (optional)
+        const margin = 5;
         
-        // Adjust top pipe collision box
-        topBox.min.x += collisionOffsetX;
-        topBox.max.x -= collisionOffsetX;
-        topBox.min.y = pipe.top.position.y - collisionOffsetY;
+        // Adjust top pipe collision box - just a slight margin for better gameplay
+        topBox.min.x += margin;
+        topBox.max.x -= margin;
         
-        // Adjust bottom pipe collision box
-        bottomBox.min.x += collisionOffsetX;
-        bottomBox.max.x -= collisionOffsetX;
-        bottomBox.max.y = pipe.bottom.position.y + collisionOffsetY;
+        // Adjust bottom pipe collision box - just a slight margin for better gameplay
+        bottomBox.min.x += margin;
+        bottomBox.max.x -= margin;
         
+        // Use these boxes for collision detection
         if (birdBox.intersectsBox(topBox) || birdBox.intersectsBox(bottomBox)) {
             return true;
         }
@@ -518,6 +552,11 @@ function updateScore() {
             // Check if score is a multiple of 5
             if (score % 5 === 0) {
                 increasePipeSpeed();
+            }
+
+            // Check if score is 10 and century image hasn't been shown yet
+            if (score === 100 && !centuryImageShown) {
+                showCenturyImage();
             }
         }
     }
@@ -579,6 +618,15 @@ function animate() {
         // Scroll background
         if (backgroundTexture) {
             backgroundTexture.offset.x -= 0.0015;
+        }
+        
+        // Move century image if it exists
+        if (centuryImageMesh) {
+            centuryImageMesh.position.x -= PIPE_SPEED * 1.5;
+            if (centuryImageMesh.position.x < -SCENE_WIDTH/2 - 300) {
+                scene.remove(centuryImageMesh);
+                centuryImageMesh = null;
+            }
         }
         
         // Move clouds
@@ -677,6 +725,34 @@ async function handleLogScore() {
     } else {
         alert('Failed to log score. Please try again.');
     }
+}
+
+// Add new function to show century image
+function showCenturyImage() {
+    centuryImageShown = true;
+    // Play century sound immediately when the function is called
+    if (centurySound) {
+        centurySound.currentTime = 0;
+        centurySound.play();
+        console.log("Century sound played");
+    } else {
+        console.log("Century sound not available");
+    }
+    // Load and create century image
+    const textureLoader = new THREE.TextureLoader();
+    textureLoader.load('100x.jpeg', (texture) => {
+        const imageGeometry = new THREE.PlaneGeometry(300, 250);
+        const imageMaterial = new THREE.MeshBasicMaterial({
+            map: texture,
+            transparent: true,
+            side: THREE.DoubleSide
+        });
+        
+        centuryImageMesh = new THREE.Mesh(imageGeometry, imageMaterial);
+        centuryImageMesh.position.set(SCENE_WIDTH/2, 0, -40);
+        scene.add(centuryImageMesh);
+
+    });
 }
 
 // Start the game
