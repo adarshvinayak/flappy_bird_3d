@@ -4,8 +4,7 @@ const FLAP_FORCE = -5;
 const PIPE_WIDTH = 100;
 const PIPE_HEIGHT = 1;
 const BIRD_SIZE = 20;
-const SCENE_WIDTH = 1920;
-const SCENE_HEIGHT = 1080;
+
 const CLOUD_COUNT = 4;
 const BASE_PIPE_SPAWN_INTERVAL = 1500;
  
@@ -37,6 +36,9 @@ const DIFFICULTY_SETTINGS = {
         pipeSpeed: isMobile ? MOBILE_PIPE_SPEED * 2 : 4.5 
     }
 };
+
+let SCENE_WIDTH = isMobile ? 1080 : 1920;
+let SCENE_HEIGHT = isMobile ? 1920 : 1080;
 
 // Game state
 let score = 0;
@@ -382,7 +384,7 @@ function setGraphicsLevel(level) {
     
     // Update graphics settings based on level
     if (level === 'low') {
-        // Remove clouds if they exist
+        // Completely remove clouds if they exist
         if (clouds) {
             clouds.forEach(cloud => {
                 scene.remove(cloud);
@@ -407,19 +409,7 @@ function setGraphicsLevel(level) {
             }
         });
     } 
-    else if (level === 'med') {
-        // Create clouds if they don't exist
-        if (clouds.length === 0 && gameStarted) {
-            createClouds();
-        }
-        
-        // Update lighting
-        scene.children.forEach(child => {
-            if (child.type === 'AmbientLight' || child.type === 'DirectionalLight') {
-                child.visible = false;
-            }
-        });
-    }
+    
     else if (level === 'high') {
         // Create clouds if they don't exist
         if (clouds.length === 0 && gameStarted) {
@@ -478,7 +468,9 @@ function startGame() {
     scoreDisplay.style.display = 'block';
     gameStarted = true;
     gameOver = false;
-    createClouds();
+    if (currentGraphicsLevel !== 'low') {
+        createClouds();
+    }
     resetGame();
     // Stop menu music and start gameplay music
     menuMusic.pause();
@@ -655,13 +647,13 @@ function createPipe() {
     
     if (currentGraphicsLevel === 'low') {
         pipeMaterial = new THREE.MeshBasicMaterial({ 
-            color: 0x8B4513
+            color: 0x008000
         });
     } else {
         pipeMaterial = new THREE.MeshPhongMaterial({ 
             map: pipeTexture,
             shininess: currentGraphicsLevel === 'high' ? 30 : 5,
-            specular: currentGraphicsLevel === 'high' ? 0x444444 : 0x111111
+            specular: currentGraphicsLevel === 'high' ? 0x000000 : 0x000000
         });
     }
     
@@ -847,14 +839,16 @@ function animate() {
             }
         }
         
-        // Move clouds
-        clouds.forEach(cloud => {
-            cloud.position.x -= PIPE_SPEED * 0.2;
-            if (cloud.position.x <= -SCENE_WIDTH/2 - 100) {
-                cloud.position.x = SCENE_WIDTH/2 + 100;
-                cloud.position.y = Math.random() * SCENE_HEIGHT - SCENE_HEIGHT/4;
-            }
-        });
+        // Only move clouds if not in low graphics mode
+        if (currentGraphicsLevel !== 'low') {
+            clouds.forEach(cloud => {
+                cloud.position.x -= PIPE_SPEED * 0.2;
+                if (cloud.position.x <= -SCENE_WIDTH/2 - 100) {
+                    cloud.position.x = SCENE_WIDTH/2 + 100;
+                    cloud.position.y = Math.random() * SCENE_HEIGHT - SCENE_HEIGHT/4;
+                }
+            });
+        }
         
         // Spawn and update pipes
         const now = Date.now();
