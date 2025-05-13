@@ -79,6 +79,82 @@
             background: #4CAF50;
             box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
         }
+       /* .graphics-toggle button {
+            padding: 12px 25px;
+            margin: 0 8px;
+            cursor: pointer;
+            background: #666;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            font-weight: bold;
+        }    
+        .graphics-toggle button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .graphics-toggle button.selected {
+            background: #4CAF50;
+            box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);    
+        }
+        .sound-toggle button {
+            padding: 12px 25px;
+            margin: 0 8px;
+            cursor: pointer;
+            background: #666;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            font-weight: bold;
+        }    
+        .sound-toggle button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .sound-toggle button.selected {
+            background: #4CAF50;
+            box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);    
+        }*/
+        
+        
+        .graphics-toggle, .sound-toggle {
+            margin: 20px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        .graphics-toggle h3, .sound-toggle h3 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+            color: #FFC107;
+        }
+        .graphics-toggle button, .sound-toggle button {
+            padding: 8px 16px;
+            margin: 0 5px;
+            font-size: 14px;
+            cursor: pointer;
+            background: #666;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        .graphics-toggle button:hover, .sound-toggle button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .graphics-toggle button.selected, .sound-toggle button.selected {
+            background: #4CAF50;
+            box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);    
+        }
+
+
         button {
             padding: 12px 30px;
             margin: 8px;
@@ -207,6 +283,11 @@
                 <button id="easy" class="selected">Easy</button>
                 <button id="hard">Hard</button>
             </div>
+            <div class="graphics-toggle">
+                <h3>Graphics Quality:</h3>
+                <button id="low-graphics">Low</button>
+                <button id="high-graphics" class="selected">High</button>
+            </div>
             <div class="instructions">
                 <h3>How to Play:</h3>
                 <ul>
@@ -262,4 +343,5 @@
     <script type="module" src="supabase.js"></script>
     <script type="module" src="game.js"></script>
 </body>
+
 </html>

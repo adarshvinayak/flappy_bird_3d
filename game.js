@@ -7,21 +7,24 @@ const BIRD_SIZE = 20;
 const SCENE_WIDTH = 1920;
 const SCENE_HEIGHT = 1080;
 const CLOUD_COUNT = 4;
-const PIPE_SPAWN_INTERVAL = 2000; // Increased from 1500 to give more time between pipes
+const BASE_PIPE_SPAWN_INTERVAL = 1500;
+ 
 const MAX_PIPE_SPEED_INCREASE = 8;
 
 // Mobile detection
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
 // Adjust constants for mobile
-const MOBILE_SCALE = isMobile ? 1 : 1;
-const MOBILE_PIPE_GAP = isMobile ? 200 : 200; // Larger gap on mobile
-const MOBILE_PIPE_SPEED = isMobile ? 100 : 2; // Slower speed on mobile
+let MOBILE_SCALE = isMobile ? 0.6 : 1;
+let MOBILE_PIPE_GAP = isMobile ? 250 : 200; // Larger gap on mobile
+let MOBILE_PIPE_SPEED = isMobile ? 1.5 : 2; // Slower speed on mobile
 
 // Mutable game settings
 let frameCount = 0;
 let PIPE_SPEED = isMobile ? MOBILE_PIPE_SPEED : 2;
 let PIPE_GAP = isMobile ? MOBILE_PIPE_GAP : 200;
+let currentGraphicsLevel = 'high';  // Default to high graphics
+let musicEnabled = true;  // Default to music enabled
 
 // Difficulty settings
 const DIFFICULTY_SETTINGS = {
@@ -186,7 +189,7 @@ function init() {
     camera.position.z = 500;
 
     // Create renderer
-    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer = new THREE.WebGLRenderer({ antialias: false });
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.getElementById('game-container').appendChild(renderer.domElement);
 
@@ -264,9 +267,45 @@ function init() {
         };
     });
 
+    // Graphics toggle
+    const graphicsButtons = document.querySelectorAll('.graphics-toggle button');
+    graphicsButtons.forEach(button => {
+        button.onclick = () => {
+            graphicsButtons.forEach(btn => btn.classList.remove('selected'));
+            button.classList.add('selected');
+            setGraphicsLevel(button.id.replace('-graphics', ''));
+        };
+    });
+
+    // Music toggle 
+    const musicButtons = document.querySelectorAll('.sound-toggle button');
+    musicButtons.forEach(button => {
+        button.onclick = () => {
+            musicButtons.forEach(btn => btn.classList.remove('selected'));
+            button.classList.add('selected');
+            toggleMusic(button.id === 'music-on');
+        };
+    });
+
     // Initialize audio
     initAudio();
     addButtonSounds();
+
+    // Load preferences from localStorage if available
+    const savedGraphicsLevel = localStorage.getItem('graphicsLevel');
+    const savedMusicEnabled = localStorage.getItem('musicEnabled');
+
+    if (savedGraphicsLevel) {
+        currentGraphicsLevel = savedGraphicsLevel;
+        graphicsButtons.forEach(btn => btn.classList.remove('selected'));
+        document.getElementById(`${savedGraphicsLevel}-graphics`).classList.add('selected');
+        // Apply the graphics settings immediately
+        setGraphicsLevel(savedGraphicsLevel);
+    } else {
+        // Set high graphics as default for first-time users
+        setGraphicsLevel('high');
+    }
+
 
     // Show main menu initially
     showMainMenu();
@@ -283,12 +322,155 @@ function init() {
     };
 }
 
+function optimizeForMobile() {
+    if (isMobile) {
+        // Lower the renderer pixel ratio for better performance
+        renderer.setPixelRatio(Math.min(1.0, devicePixelRatio * 0.7));
+        
+        // Set to lower graphics by default on mobile
+        if (!localStorage.getItem('graphicsLevel')) {
+            setGraphicsLevel('high');
+            document.querySelectorAll('.graphics-toggle button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            document.getElementById('high-graphics').classList.add('selected');
+        }
+    }
+}
+
+const PIPE_SPAWN_INTERVAL = isMobile ? 2500 : BASE_PIPE_SPAWN_INTERVAL;
+
+function adjustForDeviceSize() {
+    // Calculate appropriate scale based on device width/height
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const aspectRatio = width / height;
+    
+    // Adjust camera based on device
+    if (isMobile) {
+        // Adjust field of view for mobile
+        camera.fov = 100; // Wider field of view on mobile
+        camera.updateProjectionMatrix();
+        
+        // Adjust bird position for better visibility
+        if (bird) {
+            bird.position.x = -150; // Move bird more to the left on mobile
+        }
+    }
+    
+    // Adjust scale based on device pixel ratio
+    MOBILE_SCALE = isMobile ? Math.min(0.8, 1 / devicePixelRatio) : 1;
+    
+    // Adjust pipe gap based on screen size
+    if (width < 600) {
+        PIPE_GAP = DIFFICULTY_SETTINGS[currentDifficulty].pipeGap * 1.2;
+    }
+}
+
+
+
+
 // Set difficulty
 function setDifficulty(difficulty) {
     currentDifficulty = difficulty;
     PIPE_GAP = DIFFICULTY_SETTINGS[difficulty].pipeGap;
     PIPE_SPEED = DIFFICULTY_SETTINGS[difficulty].pipeSpeed;
 }
+
+function setGraphicsLevel(level) {
+    currentGraphicsLevel = level;
+    
+    // Update graphics settings based on level
+    if (level === 'low') {
+        // Remove clouds if they exist
+        if (clouds) {
+            clouds.forEach(cloud => {
+                scene.remove(cloud);
+            });
+            clouds = [];
+        }
+        
+        // Update lighting
+        scene.children.forEach(child => {
+            if (child.type === 'AmbientLight' || child.type === 'DirectionalLight') {
+                child.visible = false;
+            }
+        });
+        
+        // Update pipes to use simple materials instead of textures
+        pipes.forEach(pipe => {
+            if (pipe.top && pipe.top.material) {
+                pipe.top.material = new THREE.MeshBasicMaterial({color: 0x8B4513});
+            }
+            if (pipe.bottom && pipe.bottom.material) {
+                pipe.bottom.material = new THREE.MeshBasicMaterial({color: 0x8B4513});
+            }
+        });
+    } 
+    else if (level === 'med') {
+        // Create clouds if they don't exist
+        if (clouds.length === 0 && gameStarted) {
+            createClouds();
+        }
+        
+        // Update lighting
+        scene.children.forEach(child => {
+            if (child.type === 'AmbientLight' || child.type === 'DirectionalLight') {
+                child.visible = false;
+            }
+        });
+    }
+    else if (level === 'high') {
+        // Create clouds if they don't exist
+        if (clouds.length === 0 && gameStarted) {
+            createClouds();
+        }
+        
+        // Update lighting
+        scene.children.forEach(child => {
+            if (child.type === 'AmbientLight' || child.type === 'DirectionalLight') {
+                child.visible = true;
+            }
+        });
+    }
+    
+    // Save preference to localStorage
+    localStorage.setItem('graphicsLevel', level);
+}
+
+function toggleMusic(enable) {
+    musicEnabled = enable;
+    
+    // Immediately control all audio elements
+    if (enable) {
+        // Resume playing appropriate music based on game state
+        if (gameStarted && !gameOver) {
+            backgroundMusic.play();
+        } else if (!gameStarted) {
+            menuMusic.play();
+        }
+        
+        // Unmute all sound effects
+        pointSound.muted = false;
+        selectSound.muted = false;
+        deadSound.muted = false;
+        if (centurySound) centurySound.muted = false;
+    } else {
+        // Pause ALL audio when disabled
+        backgroundMusic.pause();
+        menuMusic.pause();
+        
+        // Mute all sound effects
+        pointSound.muted = true;
+        selectSound.muted = true;
+        deadSound.muted = true;
+        if (centurySound) centurySound.muted = true;
+    }
+    
+    // Save preference to localStorage
+    localStorage.setItem('musicEnabled', enable.toString());
+}
+
 
 // Start game
 function startGame() {
@@ -316,6 +498,20 @@ function showMainMenu() {
     backgroundMusic.currentTime = 0;
     menuMusic.currentTime = 0;
     menuMusic.play();
+}
+
+function playBackgroundMusic() {
+    if (musicEnabled) {
+        backgroundMusic.currentTime = 0;
+        backgroundMusic.play();
+    }
+}
+
+function playMenuMusic() {
+    if (musicEnabled) {
+        menuMusic.currentTime = 0;
+        menuMusic.play();
+    }
 }
 
 // Reset game state
@@ -347,8 +543,7 @@ function restartGame() {
     gameOverScreen.style.display = 'none';
     gameStarted = true;
     // Restart gameplay music
-    backgroundMusic.currentTime = 0;
-    backgroundMusic.play();
+    playBackgroundMusic();
 }
 
 // Create background
@@ -452,20 +647,28 @@ function flap() {
 // Create a new pipe
 function createPipe() {
     // Calculate a gap position that's not too close to the edges
-    const safeMargin = 300; // Safety margin from edges
+    const safeMargin = 250; // Safety margin from edges
     const availableHeight = SCENE_HEIGHT - PIPE_GAP - (2 * safeMargin);
     const gapPosition = (Math.random() * availableHeight) - (SCENE_HEIGHT/2 - PIPE_GAP/2 - safeMargin);
     
-    // Create pipe material with texture
-    const pipeMaterial = new THREE.MeshPhongMaterial({ 
-        map: pipeTexture,
-        shininess: 30,
-        specular: 0x444444
-    });
+    let pipeMaterial;
+    
+    if (currentGraphicsLevel === 'low') {
+        pipeMaterial = new THREE.MeshBasicMaterial({ 
+            color: 0x8B4513
+        });
+    } else {
+        pipeMaterial = new THREE.MeshPhongMaterial({ 
+            map: pipeTexture,
+            shininess: currentGraphicsLevel === 'high' ? 30 : 5,
+            specular: currentGraphicsLevel === 'high' ? 0x444444 : 0x111111
+        });
+    }
     
     // Create cylinder geometry for pipes
     const pipeRadius = PIPE_WIDTH / 2;
-    const pipeGeometry = new THREE.CylinderGeometry(pipeRadius, pipeRadius, SCENE_HEIGHT, 16);
+    const pipeSegments = currentGraphicsLevel === 'low' ? 8 : 16;
+    const pipeGeometry = new THREE.CylinderGeometry(pipeRadius, pipeRadius, SCENE_HEIGHT, pipeSegments);
     
     // Top pipe
     const topPipe = new THREE.Mesh(pipeGeometry, pipeMaterial);
@@ -549,9 +752,10 @@ function updateScore() {
             }
             scoreDisplay.textContent = `Score: ${score} | Max: ${maxScore}`;
             // Play point sound
-            pointSound.currentTime = 0;
-            pointSound.play();
-            
+            if (!pointSound.muted) {
+                pointSound.currentTime = 0;
+                pointSound.play();
+            }
             // Check if score is a multiple of 5
             if (score % 5 === 0) {
                 increasePipeSpeed();
@@ -571,9 +775,7 @@ function endGame() {
     // Play death sound
     deadSound.currentTime = 0;
     deadSound.play();
-    // Stop gameplay music
     backgroundMusic.pause();
-    backgroundMusic.currentTime = 0;
     
     // Freeze bird momentarily
     const dropStartPosition = bird.position.y;
@@ -602,8 +804,10 @@ function addButtonSounds() {
     const buttons = document.querySelectorAll('button');
     buttons.forEach(button => {
         button.addEventListener('click', () => {
-            selectSound.currentTime = 0;
-            selectSound.play();
+            if (!selectSound.muted) {
+                selectSound.currentTime = 0;
+                selectSound.play();
+            }
         });
     });
 }
@@ -744,14 +948,15 @@ async function handleLogScore() {
 // Add new function to show century image
 function showCenturyImage() {
     centuryImageShown = true;
-    // Play century sound immediately when the function is called
-    if (centurySound) {
+    // Play century sound
+    if (centurySound && !centurySound.muted) {
         centurySound.currentTime = 0;
         centurySound.play();
         console.log("Century sound played");
     } else {
         console.log("Century sound not available");
     }
+    
     // Load and create century image
     const textureLoader = new THREE.TextureLoader();
     textureLoader.load('100x.jpeg', (texture) => {
@@ -765,7 +970,6 @@ function showCenturyImage() {
         centuryImageMesh = new THREE.Mesh(imageGeometry, imageMaterial);
         centuryImageMesh.position.set(SCENE_WIDTH/2, 0, -40);
         scene.add(centuryImageMesh);
-
     });
 }
 
