@@ -6,9 +6,9 @@ const PIPE_HEIGHT = 1;
 const BIRD_SIZE = 20;
 const SCENE_WIDTH = 1920;
 const SCENE_HEIGHT = 1080;
-const CLOUD_COUNT = 4;
 const PIPE_SPAWN_INTERVAL = 2000; // Increased from 1500 to give more time between pipes
 const MAX_PIPE_SPEED_INCREASE = 8;
+
 
 // Mobile detection
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -163,6 +163,16 @@ async function testDatabaseConnection() {
     }
 }
 
+function optimizeForMobile() {
+    if (isMobile) {
+        // Reduce renderer resolution for mobile
+        renderer.setPixelRatio(0.7); // Reduce from default (usually 1 or device pixel ratio)
+        
+        // Reduce shadow quality if you have shadows
+        renderer.shadowMap.enabled = false;
+    }
+}
+
 // Initialize the game
 function init() {
     // Create scene
@@ -186,7 +196,7 @@ function init() {
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.getElementById('game-container').appendChild(renderer.domElement);
-
+    optimizeForMobile();
     // Load textures
     const textureLoader = new THREE.TextureLoader();
     
@@ -368,7 +378,7 @@ function createBackground() {
         scene.add(background);
     });
 }
-
+const CLOUD_COUNT = isMobile ? 2 : 4;
 // Create clouds
 function createClouds() {
     // Remove existing clouds
@@ -462,7 +472,7 @@ function createPipe() {
     
     // Create cylinder geometry for pipes
     const pipeRadius = PIPE_WIDTH / 2;
-    const pipeGeometry = new THREE.CylinderGeometry(pipeRadius, pipeRadius, SCENE_HEIGHT, 16);
+    const pipeGeometry = new THREE.CylinderGeometry(pipeRadius, pipeRadius, SCENE_HEIGHT, isMobile ? 8 : 16);
     
     // Top pipe
     const topPipe = new THREE.Mesh(pipeGeometry, pipeMaterial);
@@ -609,6 +619,16 @@ function addButtonSounds() {
 function animate() {
     requestAnimationFrame(animate);
     
+    if (isMobile) {
+        // Only process every other frame on mobile
+        if (frameCount % 2 !== 0) {
+            frameCount++;
+            renderer.render(scene, camera);
+            return;
+        }
+        frameCount++;
+    }
+
     if (gameStarted && !gameOver) {
         // Update bird
         velocity += GRAVITY;
