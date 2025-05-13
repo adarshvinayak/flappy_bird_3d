@@ -1,6 +1,6 @@
-# 3D Flappy Bird 🐦
+# 3D Flappy Bird 🐦 (Build using AI)
 
-A modern 3D implementation of the classic Flappy Bird game using Three.js, featuring a dynamic leaderboard system and multiple difficulty levels.
+A modern 3D implementation of the classic Flappy Bird game using Three.js ffully built using AI, featuring a dynamic leaderboard system and multiple difficulty levels.
 
 ![Game Preview](preview.png)
 
@@ -21,7 +21,7 @@ A modern 3D implementation of the classic Flappy Bird game using Three.js, featu
   - HTML5 & CSS3
 
 - **Backend**:
-  - Supabase for database and authentication
+  - Supabase for database
   - Real-time leaderboard updates
 
 ## Architecture
@@ -52,6 +52,6 @@ MIT License - feel free to use this code for your own projects!
 
 ## Credits
 
-- Game assets and sounds are custom created
+- Game assets and sounds are either stock or custom created 
 - Built with Three.js and Supabase
 - Inspired by the original Flappy Bird game 
