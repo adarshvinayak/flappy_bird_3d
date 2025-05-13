@@ -6,19 +6,20 @@ const PIPE_HEIGHT = 1;
 const BIRD_SIZE = 20;
 const SCENE_WIDTH = 1920;
 const SCENE_HEIGHT = 1080;
+const CLOUD_COUNT = 4;
 const PIPE_SPAWN_INTERVAL = 2000; // Increased from 1500 to give more time between pipes
 const MAX_PIPE_SPEED_INCREASE = 8;
-
 
 // Mobile detection
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
 // Adjust constants for mobile
-const MOBILE_SCALE = isMobile ? 2 : 1;
+const MOBILE_SCALE = isMobile ? 0.6 : 1;
 const MOBILE_PIPE_GAP = isMobile ? 250 : 200; // Larger gap on mobile
-const MOBILE_PIPE_SPEED = isMobile ? 4 : 2; // Slower speed on mobile
+const MOBILE_PIPE_SPEED = isMobile ? 1.5 : 2; // Slower speed on mobile
 
 // Mutable game settings
+let frameCount = 0;
 let PIPE_SPEED = isMobile ? MOBILE_PIPE_SPEED : 2;
 let PIPE_GAP = isMobile ? MOBILE_PIPE_GAP : 200;
 
@@ -163,13 +164,7 @@ async function testDatabaseConnection() {
     }
 }
 
-function optimizeForMobile() {
-    if (isMobile) {
-        // Reduce renderer resolution for mobile
-        renderer.setPixelRatio(1); // Reduce from default (usually 1 or device pixel ratio)
-        
-    }
-}
+
 
 // Initialize the game
 function init() {
@@ -194,7 +189,7 @@ function init() {
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.getElementById('game-container').appendChild(renderer.domElement);
-    optimizeForMobile();
+
     // Load textures
     const textureLoader = new THREE.TextureLoader();
     
@@ -376,7 +371,7 @@ function createBackground() {
         scene.add(background);
     });
 }
-const CLOUD_COUNT = isMobile ? 2 : 4;
+
 // Create clouds
 function createClouds() {
     // Remove existing clouds
@@ -470,7 +465,7 @@ function createPipe() {
     
     // Create cylinder geometry for pipes
     const pipeRadius = PIPE_WIDTH / 2;
-    const pipeGeometry = new THREE.CylinderGeometry(pipeRadius, pipeRadius, SCENE_HEIGHT, isMobile ? 8 : 16);
+    const pipeGeometry = new THREE.CylinderGeometry(pipeRadius, pipeRadius, SCENE_HEIGHT, 16);
     
     // Top pipe
     const topPipe = new THREE.Mesh(pipeGeometry, pipeMaterial);
@@ -617,16 +612,17 @@ function addButtonSounds() {
 function animate() {
     requestAnimationFrame(animate);
     
-    /*if (isMobile) {
+    // Skip frames on mobile for better performance
+    if (isMobile) {
         // Only process every other frame on mobile
         if (frameCount % 2 !== 0) {
             frameCount++;
             renderer.render(scene, camera);
             return;
         }
-        frameCount++;*/
+        frameCount++;
     }
-
+    
     if (gameStarted && !gameOver) {
         // Update bird
         velocity += GRAVITY;
