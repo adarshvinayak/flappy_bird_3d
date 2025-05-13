@@ -37,8 +37,8 @@ const DIFFICULTY_SETTINGS = {
     }
 };
 
-let SCENE_WIDTH = isMobile ? 1080 : 1920;
-let SCENE_HEIGHT = isMobile ? 1920 : 1080;
+let SCENE_WIDTH = isMobile ? 720 : 1920;
+let SCENE_HEIGHT = isMobile ? 1280 : 1080;
 
 // Game state
 let score = 0;
