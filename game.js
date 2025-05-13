@@ -16,7 +16,7 @@ const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 // Adjust constants for mobile
 const MOBILE_SCALE = isMobile ? 1 : 1;
 const MOBILE_PIPE_GAP = isMobile ? 200 : 200; // Larger gap on mobile
-const MOBILE_PIPE_SPEED = isMobile ? 5 : 2; // Slower speed on mobile
+const MOBILE_PIPE_SPEED = isMobile ? 100 : 2; // Slower speed on mobile
 
 // Mutable game settings
 let frameCount = 0;
