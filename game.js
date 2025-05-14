@@ -60,18 +60,18 @@ const DIFFICULTY_SETTINGS = {
     'easy': { 
 
 
-        pipeGap: isMobile ? MOBILE_PIPE_GAP : 230, 
+        pipeGap: isMobile ? PIPE_GAP : 230, 
 
-        pipeSpeed: isMobile ? MOBILE_PIPE_SPEED : 2 
+        pipeSpeed: isMobile ? PIPE_SPEED : 2 
 
     },
 
     'hard': { 
 
 
-        pipeGap: isMobile ? MOBILE_PIPE_GAP * 0.75 : 170, 
+        pipeGap: isMobile ? PIPE_GAP * 0.75 : 170, 
 
-        pipeSpeed: isMobile ? MOBILE_PIPE_SPEED * 2 : 4.5 
+        pipeSpeed: isMobile ? PIPE_SPEED * 2 : 4.5 
 
     }
 
