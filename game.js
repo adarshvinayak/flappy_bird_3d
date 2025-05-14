@@ -1638,27 +1638,6 @@ function animate() {
 
 
 
-    // Skip frames on mobile for better performance
-
-    if (isMobile) {
-
-        // Only process every other frame on mobile
-
-        if (frameCount % 2 !== 0) {
-
-            frameCount++;
-
-            renderer.render(scene, camera);
-
-            return;
-
-        }
-
-        frameCount++;
-
-    }
-
-
 
     if (gameStarted && !gameOver) {
 
