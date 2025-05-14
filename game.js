@@ -39,9 +39,9 @@ let MOBILE_PIPE_GAP = isMobile ? 250 : 200; // Larger gap on mobile
 
 let MOBILE_PIPE_SPEED = isMobile ? 4 : 2; // Slower speed on mobile
 
-let GRAVITY = isMobile? 1 : -0.1;
+let GRAVITY = isMobile? -1 : -0.1;
 
-let FLAP_FORCE = isMobile? 9 : -5;
+let FLAP_FORCE = isMobile? -9 : -5;
 
 // Mutable game settings
 
