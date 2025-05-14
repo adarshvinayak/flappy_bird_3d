@@ -33,15 +33,15 @@ console.log(isMobile)
 
 // Adjust constants for mobile
 
-let MOBILE_SCALE = isMobile ? 5 : 1;
+let MOBILE_SCALE = isMobile ? 0 : 1;
 
 let MOBILE_PIPE_GAP = isMobile ? 250 : 200; // Larger gap on mobile
 
-let MOBILE_PIPE_SPEED = isMobile ? 4 : 2; // Slower speed on mobile
+let MOBILE_PIPE_SPEED = isMobile ? 5 : 2; // Slower speed on mobile
 
 let GRAVITY = isMobile? -1 : -0.1;
 
-let FLAP_FORCE = isMobile? -9 : -5;
+let FLAP_FORCE = isMobile? -15 : -5;
 
 // Mutable game settings
 
