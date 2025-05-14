@@ -14,6 +14,8 @@ const MAX_PIPE_SPEED_INCREASE = 8;
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 console.log(isMobile)
 // Adjust constants for mobile
+let GRAVITY = isMobile ? -0.1;
+let FLAP_FORCE = isMobile ? -5;
 let MOBILE_SCALE = isMobile ? 0.6 : 1;
 let MOBILE_PIPE_GAP = isMobile ? 250 : 200; // Larger gap on mobile
 let MOBILE_PIPE_SPEED = isMobile ? 1.5 : 2; // Slower speed on mobile
@@ -37,8 +39,8 @@ const DIFFICULTY_SETTINGS = {
     }
 };
 
-let SCENE_WIDTH = isMobile ? 400 : 1920;
-let SCENE_HEIGHT = isMobile ? 400 : 1080;
+let SCENE_WIDTH = isMobile ? 1080 : 1920;
+let SCENE_HEIGHT = isMobile ? 1920 : 1080;
 
 // Game state
 let score = 0;
