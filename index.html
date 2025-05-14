@@ -289,6 +289,34 @@
     </style>
 </head>
 <body>
+
+<div id="mobile-warning" style="
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.9);
+    color: white;
+    font-family: sans-serif;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+">
+    <h2>This game is best experienced on a PC</h2>
+    <p>Performance and controls may be limited on mobile devices.</p>
+    <button id="continue-btn" style="
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: red;
+        color: white;
+        border: none;
+        cursor: pointer;
+    ">Continue Anyway</button>
+</div>
+
     <div id="game-container">
         <div id="score-display">Score: 0 | Max: 0</div>
         <div id="game-over">
