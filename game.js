@@ -15,7 +15,7 @@ const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 console.log(isMobile)
 
 let GRAVITY = isMobile ? -1 : -0.1;
-let FLAP_FORCE = isMobile ? -15 : -5;
+let FLAP_FORCE = isMobile ? -9 : -9;
 
 // Mutable game settings
 let frameCount = 0;
