@@ -85,7 +85,7 @@ const DIFFICULTY_SETTINGS = {
 let SCENE_WIDTH = isMobile ? 400 : 1920;
 
 
-let SCENE_HEIGHT = isMobile ? 400 : 1080;
+let SCENE_HEIGHT = isMobile ? 1080 : 1080;
 
 
 
