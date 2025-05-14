@@ -41,7 +41,7 @@ let MOBILE_PIPE_SPEED = isMobile ? 5 : 2; // Slower speed on mobile
 
 let GRAVITY = isMobile? -0.5 : -0.1;
 
-let FLAP_FORCE = isMobile? -15 : -5;
+let FLAP_FORCE = isMobile? -8 : -5;
 
 // Mutable game settings
 
