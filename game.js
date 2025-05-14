@@ -33,11 +33,11 @@ console.log(isMobile)
 
 // Adjust constants for mobile
 
-let MOBILE_SCALE = isMobile ? -5 : 1;
+let MOBILE_SCALE = isMobile ? 10 : 1;
 
-let GRAVITY = isMobile? -0.4 : -0.1;
+let GRAVITY = isMobile? -0.3 : -0.1;
 
-let FLAP_FORCE = isMobile? -12 : -5;
+let FLAP_FORCE = isMobile? -10 : -5;
 
 // Mutable game settings
 
@@ -80,7 +80,7 @@ const DIFFICULTY_SETTINGS = {
 
 
 
-let SCENE_WIDTH = isMobile ? 400 : 1920;
+let SCENE_WIDTH = isMobile ? 700 : 1920;
 
 
 let SCENE_HEIGHT = isMobile ? 1080 : 1080;
