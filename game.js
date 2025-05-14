@@ -672,72 +672,9 @@ function init() {
 
 
 
-function optimizeForMobile() {
-
-    if (isMobile) {
-
-        // Lower the renderer pixel ratio for better performance
-
-
-        renderer.setPixelRatio(Math.min(1.0, devicePixelRatio * 0.7));
 
 
 
-        // Set to lower graphics by default on mobile
-
-        if (!localStorage.getItem('graphicsLevel')) {
-
-            setGraphicsLevel('high');
-
-            document.querySelectorAll('.graphics-toggle button').forEach(btn => {
-
-                btn.classList.remove('selected');
-
-            });
-
-            document.getElementById('high-graphics').classList.add('selected');
-
-        }
-
-    }
-
-}
-
-
-
-function adjustForDeviceSize() {
-
-    // Calculate appropriate scale based on device width/height
-
-    const width = window.innerWidth;
-
-    const height = window.innerHeight;
-
-    const aspectRatio = width / height;
-
-
-
-    // Adjust camera based on device
-
-    if (isMobile) {
-
-        // Adjust field of view for mobile
-
-        camera.fov = 100; // Wider field of view on mobile
-
-        camera.updateProjectionMatrix();
-
-
-
-        // Adjust bird position for better visibility
-
-        if (bird) {
-
-            bird.position.x = -150; // Move bird more to the left on mobile
-
-        }
-
-    }
 
 
 
