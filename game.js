@@ -1,6 +1,6 @@
 // Game constants
-//const GRAVITY = -0.1;
-//const FLAP_FORCE = -5;
+const GRAVITY = -0.1;
+const FLAP_FORCE = -5;
 const PIPE_WIDTH = 100;
 const PIPE_HEIGHT = 1;
 const BIRD_SIZE = 20;
@@ -14,13 +14,9 @@ const MAX_PIPE_SPEED_INCREASE = 8;
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 console.log(isMobile)
 // Adjust constants for mobile
-let GRAVITY = isMobile ? -0.1;
-let FLAP_FORCE = isMobile ? -5;
 let MOBILE_SCALE = isMobile ? 0.6 : 1;
 let MOBILE_PIPE_GAP = isMobile ? 250 : 200; // Larger gap on mobile
 let MOBILE_PIPE_SPEED = isMobile ? 1.5 : 2; // Slower speed on mobile
-let GRAVITY = isMobile ? 5 : -0.1;
-let FLAP_FORCE = isMobile ? 5 : -5;
 
 // Mutable game settings
 let frameCount = 0;
@@ -41,8 +37,8 @@ const DIFFICULTY_SETTINGS = {
     }
 };
 
-let SCENE_WIDTH = isMobile ? 1080 : 1920;
-let SCENE_HEIGHT = isMobile ? 1920 : 1080;
+let SCENE_WIDTH = isMobile ? 1920 : 1920;
+let SCENE_HEIGHT = isMobile ? 1080 : 1080;
 
 // Game state
 let score = 0;
