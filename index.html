@@ -261,6 +261,31 @@
             border-radius: 4px;
             border: 1px solid #ccc;
         }
+
+
+.leaderboard-scroll-container {
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-bottom: 10px;
+    }
+
+    .leaderboard-section {
+        display: inline-block;
+        vertical-align: top;
+        min-width: 320px;
+        margin-right: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 8px 12px;
+        text-align: left;
+        border: 1px solid #ccc;
+    }
     </style>
 </head>
 <body>
@@ -300,42 +325,42 @@
             <button id="start-game">Start Game</button>
             <button id="view-leaderboard" style="background-color: rgb(255, 126, 126); color: white;">View Leaderboard</button>
             <h6>find the 100x easter egg if you can</h6>
+
+
+ <div id="leaderboard" style="display: none;">
+    <h2>Leaderboard</h2>
+    <div class="leaderboard-scroll-container">
+        <div class="leaderboard-section">
+            <h3>Easy Mode</h3>
+            <table id="easy-leaderboard">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Name</th>
+                        <th>Score</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
-        <div id="leaderboard" style="display: none;">
-            <h2>Leaderboard</h2>
-            <div class="leaderboard-container">
-                <div class="leaderboard-section">
-                    <h3>Easy Mode</h3>
-                    <table id="easy-leaderboard">
-                        <thead>
-                            <tr>
-                                <th>Rank</th>
-                                <th>Name</th>
-                                <th>Score</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-                <div class="leaderboard-section">
-                    <h3>Hard Mode</h3>
-                    <table id="hard-leaderboard">
-                        <thead>
-                            <tr>
-                                <th>Rank</th>
-                                <th>Name</th>
-                                <th>Score</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-            <button id="close-leaderboard">Close</button>
+        <div class="leaderboard-section">
+            <h3>Hard Mode</h3>
+            <table id="hard-leaderboard">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Name</th>
+                        <th>Score</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
     </div>
+    <button id="close-leaderboard">Close</button>
+</div>
 
     <!-- Dependencies -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
