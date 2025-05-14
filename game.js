@@ -1,6 +1,6 @@
 // Game constants
-const GRAVITY = -0.1;
-const FLAP_FORCE = -5;
+//const GRAVITY = -0.1;
+//const FLAP_FORCE = -5;
 const PIPE_WIDTH = 100;
 const PIPE_HEIGHT = 1;
 const BIRD_SIZE = 20;
@@ -19,6 +19,8 @@ let FLAP_FORCE = isMobile ? -5;
 let MOBILE_SCALE = isMobile ? 0.6 : 1;
 let MOBILE_PIPE_GAP = isMobile ? 250 : 200; // Larger gap on mobile
 let MOBILE_PIPE_SPEED = isMobile ? 1.5 : 2; // Slower speed on mobile
+let GRAVITY = isMobile ? 5 : -0.1;
+let FLAP_FORCE = isMobile ? 5 : -5;
 
 // Mutable game settings
 let frameCount = 0;
