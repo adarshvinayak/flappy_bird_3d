@@ -6,8 +6,8 @@ const PIPE_HEIGHT = 1;
 const BIRD_SIZE = 20;
 
 const CLOUD_COUNT = 4;
-const BASE_PIPE_SPAWN_INTERVAL = 1500;
- 
+const BASE_PIPE_SPAWN_INTERVAL = 1500; // Default spawn interval
+const BASE_PIPE_SPEED = DIFFICULTY_SETTINGS[currentDifficulty].pipeSpeed;
 const MAX_PIPE_SPEED_INCREASE = 8;
 
 // Mobile detection
@@ -324,10 +324,14 @@ function init() {
     };
 }
 
+function getAdjustedSpawnInterval() {
+    return BASE_PIPE_SPAWN_INTERVAL * (BASE_PIPE_SPEED / PIPE_SPEED);
+}
+
 function optimizeForMobile() {
     if (isMobile) {
         // Lower the renderer pixel ratio for better performance
-        renderer.setPixelRatio(Math.min(1.0, devicePixelRatio * 0.7));
+        renderer.setPixelRatio(Math.min(1.0, devicePixelRatio * 0.2));
         
         // Set to lower graphics by default on mobile
         if (!localStorage.getItem('graphicsLevel')) {
@@ -852,7 +856,7 @@ function animate() {
         
         // Spawn and update pipes
         const now = Date.now();
-        if (now - lastPipeSpawn > PIPE_SPAWN_INTERVAL) {
+        if (now - lastPipeSpawn > getAdjustedSpawnInterval()) {
             createPipe();
             lastPipeSpawn = now;
         }
