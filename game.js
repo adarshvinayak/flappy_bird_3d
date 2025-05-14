@@ -39,7 +39,7 @@ let MOBILE_PIPE_GAP = isMobile ? 250 : 200; // Larger gap on mobile
 
 let MOBILE_PIPE_SPEED = isMobile ? 5 : 2; // Slower speed on mobile
 
-let GRAVITY = isMobile? -1 : -0.1;
+let GRAVITY = isMobile? -0.5 : -0.1;
 
 let FLAP_FORCE = isMobile? -15 : -5;
 
