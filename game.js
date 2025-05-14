@@ -6,13 +6,13 @@ const PIPE_HEIGHT = 1;
 const BIRD_SIZE = 20;
 
 const CLOUD_COUNT = 4;
-const BASE_PIPE_SPAWN_INTERVAL = 1500; // Default spawn interval
-const BASE_PIPE_SPEED = DIFFICULTY_SETTINGS[currentDifficulty].pipeSpeed;
+const BASE_PIPE_SPAWN_INTERVAL = 1500;
+ 
 const MAX_PIPE_SPEED_INCREASE = 8;
 
 // Mobile detection
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
+console.log(isMobile)
 // Adjust constants for mobile
 let MOBILE_SCALE = isMobile ? 0.6 : 1;
 let MOBILE_PIPE_GAP = isMobile ? 250 : 200; // Larger gap on mobile
@@ -28,17 +28,17 @@ let musicEnabled = true;  // Default to music enabled
 // Difficulty settings
 const DIFFICULTY_SETTINGS = {
     'easy': { 
-        pipeGap: isMobile ? MOBILE_PIPE_GAP : 200, 
+        pipeGap: isMobile ? MOBILE_PIPE_GAP : 230, 
         pipeSpeed: isMobile ? MOBILE_PIPE_SPEED : 2 
     },
     'hard': { 
-        pipeGap: isMobile ? MOBILE_PIPE_GAP * 0.75 : 150, 
+        pipeGap: isMobile ? MOBILE_PIPE_GAP * 0.75 : 170, 
         pipeSpeed: isMobile ? MOBILE_PIPE_SPEED * 2 : 4.5 
     }
 };
 
-let SCENE_WIDTH = isMobile ? 720 : 1920;
-let SCENE_HEIGHT = isMobile ? 1280 : 1080;
+let SCENE_WIDTH = isMobile ? 400 : 1920;
+let SCENE_HEIGHT = isMobile ? 400 : 1080;
 
 // Game state
 let score = 0;
@@ -75,27 +75,27 @@ import { logScore, getLeaderboard } from './supabase.js'
 // Initialize audio
 function initAudio() {
     // Background music
-    backgroundMusic = new Audio('muxic.mp3');
+    backgroundMusic = new Audio('assets/muxic.mp3');
     backgroundMusic.loop = true;
     backgroundMusic.volume = 0.3;
 
     // Menu music
-    menuMusic = new Audio('menumuxic.mp3');
+    menuMusic = new Audio('assets/menumuxic.mp3');
     menuMusic.loop = true;
     menuMusic.volume = 0.7;
 
     // Sound effects
-    pointSound = new Audio('point.mp3');
+    pointSound = new Audio('assets/point.mp3');
     pointSound.volume = 0.4;
     
-    selectSound = new Audio('select.mp3');
+    selectSound = new Audio('assets/select.mp3');
     selectSound.volume = 0.3;
     
-    deadSound = new Audio('dead.mp3');
+    deadSound = new Audio('assets/dead.mp3');
     deadSound.volume = 0.1;
 
     // Century sound
-    centurySound = new Audio('100.mp3');
+    centurySound = new Audio('assets/100.mp3');
     centurySound.volume = 1;
 }
 
@@ -199,7 +199,7 @@ function init() {
     const textureLoader = new THREE.TextureLoader();
     
     // Load background texture
-    textureLoader.load('background.png', (texture) => {
+    textureLoader.load('assets/background.png', (texture) => {
         texture.wrapS = THREE.RepeatWrapping;
         texture.wrapT = THREE.RepeatWrapping;
         texture.repeat.set(3, 1);
@@ -218,7 +218,7 @@ function init() {
     });
     
     // Load bird texture
-    textureLoader.load('birdy.png', (texture) => {
+    textureLoader.load('assets/birdy.png', (texture) => {
         const birdGeometry = new THREE.PlaneGeometry(BIRD_SIZE * 3, BIRD_SIZE * 2);
         const birdMaterial = new THREE.MeshBasicMaterial({
             map: texture,
@@ -230,7 +230,7 @@ function init() {
     });
 
     // Load pipe texture
-    textureLoader.load('brick.jpg', (texture) => {
+    textureLoader.load('assets/brick.jpg', (texture) => {
         texture.wrapS = THREE.RepeatWrapping;
         texture.wrapT = THREE.RepeatWrapping;
         texture.repeat.set(1, 4); // Adjust these values to control texture tiling
@@ -324,14 +324,10 @@ function init() {
     };
 }
 
-function getAdjustedSpawnInterval() {
-    return BASE_PIPE_SPAWN_INTERVAL * (BASE_PIPE_SPEED / PIPE_SPEED);
-}
-
 function optimizeForMobile() {
     if (isMobile) {
         // Lower the renderer pixel ratio for better performance
-        renderer.setPixelRatio(Math.min(1.0, devicePixelRatio * 0.2));
+        renderer.setPixelRatio(Math.min(1.0, devicePixelRatio * 0.7));
         
         // Set to lower graphics by default on mobile
         if (!localStorage.getItem('graphicsLevel')) {
@@ -545,7 +541,7 @@ function restartGame() {
 // Create background
 function createBackground() {
     const textureLoader = new THREE.TextureLoader();
-    textureLoader.load('background.png', (texture) => {
+    textureLoader.load('assets/background.png', (texture) => {
         texture.wrapS = THREE.RepeatWrapping;
         texture.wrapT = THREE.RepeatWrapping;
         texture.repeat.set(3, 1);
@@ -856,7 +852,7 @@ function animate() {
         
         // Spawn and update pipes
         const now = Date.now();
-        if (now - lastPipeSpawn > getAdjustedSpawnInterval()) {
+        if (now - lastPipeSpawn > PIPE_SPAWN_INTERVAL) {
             createPipe();
             lastPipeSpawn = now;
         }
