@@ -9,7 +9,7 @@ A modern 3D implementation of the classic Flappy Bird game using Three.js ffully
 - 🎮 3D gameplay with smooth animations
 - 🏆 Real-time leaderboard system
 - 🎯 Multiple difficulty levels (Easy/Hard)
-- 🎵 Background music and sound effectshttps://github.com/adarshvinayak/flappy_bird_3d/blob/main/README.md
+- 🎵 Background music and sound effects
 - 📱 Responsive design
 - 🌟 Progressive difficulty (speed increases with score)
 
@@ -34,7 +34,7 @@ The game follows a modular architecture:
 
 ## Controls
 
-- **Space** or **Click**: Make the bird flap
+- **Space** or **Left Click**: Make the bird flap
 - **Easy Mode**: Wider gaps, slower pipes
 - **Hard Mode**: Narrower gaps, faster pipes
 
