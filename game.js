@@ -705,10 +705,6 @@ function optimizeForMobile() {
 
 
 
-const PIPE_SPAWN_INTERVAL = isMobile ? 2500 : BASE_PIPE_SPAWN_INTERVAL;
-
-
-
 function adjustForDeviceSize() {
 
     // Calculate appropriate scale based on device width/height
@@ -1731,7 +1727,7 @@ function animate() {
         const now = Date.now();
 
 
-        if (now - lastPipeSpawn > PIPE_SPAWN_INTERVAL) {
+        if (now - lastPipeSpawn > BASE_PIPE_SPAWN_INTERVAL) {
 
             createPipe();
 
