@@ -33,23 +33,19 @@ console.log(isMobile)
 
 // Adjust constants for mobile
 
-let MOBILE_SCALE = isMobile ? 0 : 1;
+let MOBILE_SCALE = isMobile ? -5 : 1;
 
-let MOBILE_PIPE_GAP = isMobile ? 250 : 200; // Larger gap on mobile
+let GRAVITY = isMobile? -0.4 : -0.1;
 
-let MOBILE_PIPE_SPEED = isMobile ? 5 : 2; // Slower speed on mobile
-
-let GRAVITY = isMobile? -0.5 : -0.1;
-
-let FLAP_FORCE = isMobile? -8 : -5;
+let FLAP_FORCE = isMobile? -12 : -5;
 
 // Mutable game settings
 
 let frameCount = 0;
 
-let PIPE_SPEED = isMobile ? MOBILE_PIPE_SPEED : 2;
+let PIPE_SPEED = isMobile ? 5 : 2;
 
-let PIPE_GAP = isMobile ? MOBILE_PIPE_GAP : 200;
+let PIPE_GAP = isMobile ? 200 : 200;
 
 let currentGraphicsLevel = 'high';  // Default to high graphics
 
