@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.removeChild(warning);
         const startBtn = document.getElementById('start-game');
         if (startBtn) startBtn.disabled = false;
-    }});
+    }}});
 
     // Assemble
     warning.appendChild(title);
