@@ -1,7 +1,13 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
-const supabaseUrl = 'https://oqwtbmdhjluxxzxncvuj.supabase.co'
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9xd3RibWRoamx1eHh6eG5jdnVqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwODE2MjMsImV4cCI6MjA2MjY1NzYyM30.HUnXhaHbL7ano53rR0feU9m1yU0317J_Zgjzu21HMOw'
+const supabaseUrl = process.env.SUPABASEURL;
+const supabaseKey = process.env.SUPABASEKEY;
+
+if (!supabaseKey) {
+    console.error("Supabase key is not defined!");
+} else {
+    console.log("Supabase key loaded successfully!");
+}
 
 export const supabase = createClient(supabaseUrl, supabaseKey)
 console.error('supabase connected')
