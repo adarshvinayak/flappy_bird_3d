@@ -59,7 +59,7 @@ let FLAP_FORCE = isMobile? -10 : -5;
 // Mutable game settings
 let frameCount = 0;
 let PIPE_SPEED = isMobile ? 5 : 2;
-let PIPE_GAP = isMobile ? 250 : 200;
+let PIPE_GAP = isMobile ? 230 : 200;
 let currentGraphicsLevel = 'high';  // Default to high graphics
 let musicEnabled = true;  // Default to music enabled
 // Difficulty settings
@@ -70,7 +70,7 @@ const DIFFICULTY_SETTINGS = {
     },
     'hard': { 
         pipeGap: isMobile ? PIPE_GAP * 0.75 : 170, 
-        pipeSpeed: isMobile ? PIPE_SPEED * 2 : 4.5 
+        pipeSpeed: isMobile ? PIPE_SPEED * 1.5 : 4.5 
     }
 };
 let SCENE_WIDTH = isMobile ? 900 : 1920;
