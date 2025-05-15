@@ -28,6 +28,30 @@ const MAX_PIPE_SPEED_INCREASE = 8;
 
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
 
+document.addEventListener('DOMContentLoaded', () => {
+    if (!isMobile) return; // only proceed if it's a mobile device
+
+    // Create overlay
+    const warning = document.createElement('div');
+    warning.id = 'mobile-warning';
+    warning.style.position = 'fixed';
+    warning.style.top = 0;
+    warning.style.left = 0;
+    warning.style.right = 0;
+    warning.style.bottom = 0;
+    warning.style.background = 'rgba(0, 0, 0, 0.95)';
+    warning.style.color = 'white';
+    warning.style.fontFamily = 'sans-serif';
+    warning.style.zIndex = 9999;
+    warning.style.display = 'flex';
+    warning.style.flexDirection = 'column';
+    warning.style.alignItems = 'center';
+    warning.style.justifyContent = 'center';
+    warning.style.padding = '5vw';
+    warning.style.boxSizing = 'border-box';
+    warning.style.textAlign = 'center';
+
+    });
 
 
 // Adjust constants for mobile
