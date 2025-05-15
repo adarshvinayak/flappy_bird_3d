@@ -1,6 +1,9 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
-const supabase = createClient(process.env.SUPABASEURL, process.env.SUPABASEKEY);
+const supabase = createClient(
+  import.meta.env.supabaseUrl,
+  import.meta.env.supabaseKey
+);
 
 console.error('supabase connected')
 export async function logScore(difficulty, name, score) {
