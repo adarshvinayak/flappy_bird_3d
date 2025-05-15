@@ -28,21 +28,54 @@ const MAX_PIPE_SPEED_INCREASE = 8;
 
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
 
-/*window.addEventListener('load', () => {
-    if (isMobile) {
-        const warning = document.getElementById('mobile-warning');
-        const continueBtn = document.getElementById('continue-btn');
-        warning.style.display = 'flex';
 
-        continueBtn.addEventListener('click', () => {
-            warning.style.display = 'none';
-            showMainMenu(); // or startGame() or whatever your menu function is
-        });
-    } else {
-        showMainMenu(); // PC users go straight to menu
-    }
-});*/
+document.addEventListener('DOMContentLoaded', () => {
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (!isMobile) return; // only proceed if it's a mobile device
 
+    // Create overlay
+    const warning = document.createElement('div');
+    warning.id = 'mobile-warning';
+    warning.style.position = 'fixed';
+    warning.style.top = 0;
+    warning.style.left = 0;
+    warning.style.right = 0;
+    warning.style.bottom = 0;
+    warning.style.background = 'rgba(0, 0, 0, 0.95)';
+    warning.style.color = 'white';
+    warning.style.fontFamily = 'sans-serif';
+    warning.style.zIndex = 9999;
+    warning.style.display = 'flex';
+    warning.style.flexDirection = 'column';
+    warning.style.alignItems = 'center';
+    warning.style.justifyContent = 'center';
+    warning.style.padding = '5vw';
+    warning.style.boxSizing = 'border-box';
+    warning.style.textAlign = 'center';
+
+    // Message
+    const title = document.createElement('h2');
+    title.innerText = 'This game is best experienced on a PC';
+    const msg = document.createElement('p');
+    msg.innerText = 'Performance and controls may be limited on mobile devices.';
+
+    // Continue button
+    const btn = document.createElement('button');
+    btn.innerText = 'Continue Anyway';
+    btn.style.marginTop = '20px';
+    btn.style.padding = '12px 24px';
+    btn.style.backgroundColor = '#4CAF50';
+    btn.style.color = 'white';
+    btn.style.border = 'none';
+    btn.style.borderRadius = '8px';
+    btn.style.cursor = 'pointer';
+    btn.style.fontSize = '16px';
+
+    btn.addEventListener('click', () => {
+        document.body.removeChild(warning);
+        const startBtn = document.getElementById('start-game');
+        if (startBtn) startBtn.disabled = false;
+    });
 
 
 // Adjust constants for mobile
