@@ -26,9 +26,9 @@ const MAX_PIPE_SPEED_INCREASE = 8;
 
 // Mobile detection
 
-/*const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
 
-window.addEventListener('load', () => {
+/*window.addEventListener('load', () => {
     if (isMobile) {
         const warning = document.getElementById('mobile-warning');
         const continueBtn = document.getElementById('continue-btn');
