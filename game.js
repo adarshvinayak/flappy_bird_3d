@@ -350,7 +350,7 @@ function adjustForDeviceSize() {
     // Adjust camera based on device
     if (isMobile) {
         // Adjust field of view for mobile
-        camera.fov = 100; // Wider field of view on mobile
+        camera.fov = 200; // Wider field of view on mobile
         camera.updateProjectionMatrix();
         // Adjust bird position for better visibility
         if (bird) {
