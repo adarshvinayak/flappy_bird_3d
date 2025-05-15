@@ -1,15 +1,7 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
-const supabaseUrl = process.env.SUPABASEURL;
-const supabaseKey = process.env.SUPABASEKEY;
+const supabase = createClient(process.env.SUPABASEURL, process.env.SUPABASEKEY);
 
-if (!supabaseKey) {
-    console.error("Supabase key is not defined!");
-} else {
-    console.log("Supabase key loaded successfully!");
-}
-
-export const supabase = createClient(supabaseUrl, supabaseKey)
 console.error('supabase connected')
 export async function logScore(difficulty, name, score) {
     try {
