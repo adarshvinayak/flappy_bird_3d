@@ -30,7 +30,6 @@ const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     if (!isMobile) return; // only proceed if it's a mobile device
 
     // Create overlay
