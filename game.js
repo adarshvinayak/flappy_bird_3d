@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const title = document.createElement('h2');
     title.innerText = 'This game is best experienced on a PC';
     const msg = document.createElement('p');
-    msg.innerText = 'Performance and controls may be limited on mobile devices.';
+    msg.innerText = 'Performance and controls may be limited or buggy on mobile devices.';
 
     // Continue button
     const btn = document.createElement('button');
