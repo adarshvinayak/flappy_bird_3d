@@ -26,7 +26,7 @@ const MAX_PIPE_SPEED_INCREASE = 8;
 
 // Mobile detection
 
-const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+/*const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
 
 window.addEventListener('load', () => {
     if (isMobile) {
@@ -41,13 +41,13 @@ window.addEventListener('load', () => {
     } else {
         showMainMenu(); // PC users go straight to menu
     }
-});
+});*/
 
 
 
 // Adjust constants for mobile
 
-let MOBILE_SCALE = isMobile ? 10 : 1;
+let MOBILE_SCALE = isMobile ? 1 : 1;
 
 let GRAVITY = isMobile? -0.3 : -0.1;
 
@@ -59,7 +59,7 @@ let frameCount = 0;
 
 let PIPE_SPEED = isMobile ? 5 : 2;
 
-let PIPE_GAP = isMobile ? 200 : 200;
+let PIPE_GAP = isMobile ? 300 : 200;
 
 let currentGraphicsLevel = 'high';  // Default to high graphics
 
@@ -85,7 +85,7 @@ const DIFFICULTY_SETTINGS = {
 
         pipeGap: isMobile ? PIPE_GAP * 0.75 : 170, 
 
-        pipeSpeed: isMobile ? PIPE_SPEED * 2 : 4.5 
+        pipeSpeed: isMobile ? PIPE_SPEED * 0.5 : 4.5 
 
     }
 
@@ -94,7 +94,7 @@ const DIFFICULTY_SETTINGS = {
 
 
 
-let SCENE_WIDTH = isMobile ? 700 : 1920;
+let SCENE_WIDTH = isMobile ? 900 : 1920;
 
 
 let SCENE_HEIGHT = isMobile ? 1080 : 1080;
