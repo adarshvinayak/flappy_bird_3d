@@ -9,8 +9,12 @@ const BASE_PIPE_SPAWN_INTERVAL = 1500;
 const MAX_PIPE_SPEED_INCREASE = 8;
 // Mobile detection
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+
+<script>
 document.addEventListener('DOMContentLoaded', () => {
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     if (!isMobile) return; // only proceed if it's a mobile device
+
     // Create overlay
     const warning = document.createElement('div');
     warning.id = 'mobile-warning';
@@ -30,7 +34,43 @@ document.addEventListener('DOMContentLoaded', () => {
     warning.style.padding = '5vw';
     warning.style.boxSizing = 'border-box';
     warning.style.textAlign = 'center';
+
+    // Message
+    const title = document.createElement('h2');
+    title.innerText = 'This game is best experienced on a PC';
+    const msg = document.createElement('p');
+    msg.innerText = 'Performance and controls may be limited on mobile devices.';
+
+    // Continue button
+    const btn = document.createElement('button');
+    btn.innerText = 'Continue Anyway';
+    btn.style.marginTop = '20px';
+    btn.style.padding = '12px 24px';
+    btn.style.backgroundColor = '#4CAF50';
+    btn.style.color = 'white';
+    btn.style.border = 'none';
+    btn.style.borderRadius = '8px';
+    btn.style.cursor = 'pointer';
+    btn.style.fontSize = '16px';
+
+    btn.addEventListener('click', () => {
+        document.body.removeChild(warning);
+        const startBtn = document.getElementById('start-game');
+        if (startBtn) startBtn.disabled = false;
     });
+
+    // Assemble
+    warning.appendChild(title);
+    warning.appendChild(msg);
+    warning.appendChild(btn);
+    document.body.appendChild(warning);
+
+    // Optionally disable start button
+    const startBtn = document.getElementById('start-game');
+    if (startBtn) startBtn.disabled = true;
+});
+</script>
+
 // Adjust constants for mobile
 let MOBILE_SCALE = isMobile ? 1 : 1;
 let GRAVITY = isMobile? -0.3 : -0.1;
