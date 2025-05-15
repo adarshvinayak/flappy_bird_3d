@@ -11,7 +11,7 @@ const MAX_PIPE_SPEED_INCREASE = 8;
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
 
 document.addEventListener('DOMContentLoaded', () => {
-
+ if(ismobile){
     const warning = document.createElement('div');
     warning.id = 'mobile-warning';
     warning.style.position = 'fixed';
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.removeChild(warning);
         const startBtn = document.getElementById('start-game');
         if (startBtn) startBtn.disabled = false;
-    });
+    }});
 
     // Assemble
     warning.appendChild(title);
