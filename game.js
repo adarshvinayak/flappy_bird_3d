@@ -10,6 +10,46 @@ const MAX_PIPE_SPEED_INCREASE = 8;
 // Mobile detection
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
 
+// Show a "Best on PC" tip on game load
+function showPCTip() {
+    if (!document.getElementById('pc-tip')) {
+        const tip = document.createElement('div');
+        tip.id = 'pc-tip';
+        tip.innerText = 'Best experienced on PC';
+        Object.assign(tip.style, {
+            position: 'fixed',
+            bottom: '20px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: 'rgba(0, 0, 0, 0.8)',
+            color: 'white',
+            padding: '12px 24px',
+            borderRadius: '10px',
+            fontSize: '16px',
+            fontFamily: 'sans-serif',
+            zIndex: 9999,
+            display: 'none',
+            transition: 'opacity 0.5s'
+        });
+        document.body.appendChild(tip);
+    }
+
+    const tipBox = document.getElementById('pc-tip');
+    tipBox.style.display = 'block';
+    tipBox.style.opacity = '1';
+
+    setTimeout(() => {
+        tipBox.style.opacity = '0';
+        setTimeout(() => {
+            tipBox.style.display = 'none';
+        }, 500);
+    }, 3000);
+}
+
+// Run it once when the page loads
+window.addEventListener('DOMContentLoaded', () => {
+    showPCTip();
+});
 
 
 // Adjust constants for mobile
