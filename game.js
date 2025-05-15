@@ -10,41 +10,63 @@ const MAX_PIPE_SPEED_INCREASE = 8;
 // Mobile detection
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
 
-// Show a "Best on PC" tip on game load
-function showPCTip() {
-    if (!document.getElementById('pc-tip')) {
-        const tip = document.createElement('div');
-        tip.id = 'pc-tip';
-        tip.innerText = 'Best experienced on PC';
-        Object.assign(tip.style, {
-            position: 'fixed',
-            bottom: '70%',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            background: 'rgba(0, 0, 0, 0.8)',
-            color: 'white',
-            padding: '12px 24px',
-            borderRadius: '10px',
-            fontSize: '16px',
-            fontFamily: 'sans-serif',
-            zIndex: 9999,
-            display: 'none',
-            transition: 'opacity 0.5s'
-        });
-        document.body.appendChild(tip);
-    }
+document.addEventListener('DOMContentLoaded', () => {
+    // Create overlay
+    const warning = document.createElement('div');
+    warning.id = 'mobile-warning';
+    warning.style.position = 'fixed';
+    warning.style.top = 0;
+    warning.style.left = 0;
+    warning.style.right = 0;
+    warning.style.bottom = 0;
+    warning.style.background = 'rgba(0, 0, 0, 0.95)';
+    warning.style.color = 'white';
+    warning.style.fontFamily = 'sans-serif';
+    warning.style.zIndex = 9999;
+    warning.style.display = 'flex';
+    warning.style.flexDirection = 'column';
+    warning.style.alignItems = 'center';
+    warning.style.justifyContent = 'center';
+    warning.style.padding = '5vw';
+    warning.style.boxSizing = 'border-box';
+    warning.style.textAlign = 'center';
 
-    const tipBox = document.getElementById('pc-tip');
-    tipBox.style.display = 'block';
-    tipBox.style.opacity = '1';
+    // Message
+    const title = document.createElement('h2');
+    title.innerText = 'This game is best experienced on a PC';
+    const msg = document.createElement('p');
+    msg.innerText = 'Performance and controls may be limited on mobile devices.';
 
-    setTimeout(() => {
-        tipBox.style.opacity = '0';
-        setTimeout(() => {
-            tipBox.style.display = 'none';
-        }, 500);
-    }, 3000);
-}
+    // Continue button
+    const btn = document.createElement('button');
+    btn.innerText = 'Continue Anyway';
+    btn.style.marginTop = '20px';
+    btn.style.padding = '12px 24px';
+    btn.style.backgroundColor = '#4CAF50';
+    btn.style.color = 'white';
+    btn.style.border = 'none';
+    btn.style.borderRadius = '8px';
+    btn.style.cursor = 'pointer';
+    btn.style.fontSize = '16px';
+
+    btn.addEventListener('click', () => {
+        document.body.removeChild(warning);
+        const startBtn = document.getElementById('start-game');
+        if (startBtn) startBtn.disabled = false;
+    });
+
+    // Assemble
+    warning.appendChild(title);
+    warning.appendChild(msg);
+    warning.appendChild(btn);
+    document.body.appendChild(warning);
+
+    // Optionally disable start button
+    const startBtn = document.getElementById('start-game');
+    if (startBtn) startBtn.disabled = true;
+});
+
+
 
 // Run it once when the page loads
 window.addEventListener('DOMContentLoaded', () => {
