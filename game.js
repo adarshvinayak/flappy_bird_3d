@@ -18,7 +18,7 @@ function showPCTip() {
         tip.innerText = 'Best experienced on PC';
         Object.assign(tip.style, {
             position: 'fixed',
-            bottom: '20px',
+            bottom: '30%',
             left: '50%',
             transform: 'translateX(-50%)',
             background: 'rgba(0, 0, 0, 0.8)',
