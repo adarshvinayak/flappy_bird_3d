@@ -70,7 +70,7 @@ const DIFFICULTY_SETTINGS = {
     },
     'hard': { 
         pipeGap: isMobile ? PIPE_GAP * 0.75 : 170, 
-        pipeSpeed: isMobile ? PIPE_SPEED * 0.5 : 4.5 
+        pipeSpeed: isMobile ? PIPE_SPEED * 1 : 4.5 
     }
 };
 let SCENE_WIDTH = isMobile ? 900 : 1920;
