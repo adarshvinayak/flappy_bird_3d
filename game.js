@@ -69,8 +69,8 @@ const DIFFICULTY_SETTINGS = {
         pipeSpeed: isMobile ? PIPE_SPEED : 2 
     },
     'hard': { 
-        pipeGap: isMobile ? PIPE_GAP * 0.75 : 170, 
-        pipeSpeed: isMobile ? PIPE_SPEED * 1.5 : 4.5 
+        pipeGap: isMobile ? PIPE_GAP * 0.9 : 170, 
+        pipeSpeed: isMobile ? PIPE_SPEED * 1.2 : 4.5 
     }
 };
 let SCENE_WIDTH = isMobile ? 900 : 1920;
