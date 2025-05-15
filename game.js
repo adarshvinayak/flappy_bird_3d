@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const startBtn = document.getElementById('start-game');
     if (startBtn) startBtn.disabled = true;
 });
-</script>
+
 
 // Adjust constants for mobile
 let MOBILE_SCALE = isMobile ? 1 : 1;
