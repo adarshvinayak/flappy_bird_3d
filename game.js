@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Continue button
     const btn = document.createElement('button');
-    btn.innerText = 'Continue Anyway';
+    btn.innerText = 'Continue';
     btn.style.marginTop = '20px';
     btn.style.padding = '12px 24px';
     btn.style.backgroundColor = '#4CAF50';
