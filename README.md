@@ -4,6 +4,10 @@ A modern 3D implementation of the classic Flappy Bird game using Three.js ffully
 
 ![Game Preview](preview.png)
 
+
+Play the game [Flappy Bird 3D](https://flappy-bird-3d.vercel.app/).
+
+
 ## Features
 
 - 🎮 3D gameplay with smooth animations
